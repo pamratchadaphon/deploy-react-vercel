@@ -3,7 +3,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 //Login & Register
 import Login from './pages/Login'
 import Register from './pages/Register'
-import TestCors from './pages/testCors'
+
 //Page Admin
 import ManageRiceVariety from './pages/admin/ManageRiceVariety'
 import ManageRiceCaltivation from './pages/admin/ManageRiceCaltivation'
@@ -28,7 +28,7 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<TestCors/>}/>
+          <Route path='/' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
 
           <Route path='/user/home/:user_id' element={<UserAuthen><HomepageUser/></UserAuthen>}/>
