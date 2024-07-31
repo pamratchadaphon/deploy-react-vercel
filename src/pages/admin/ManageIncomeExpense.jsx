@@ -42,7 +42,7 @@ const ManageIncomeExpense = () => {
 
             <div className="bg-white m-4 rounded-lg shadow space-y-4 p-4">
               <div className="flex gap-2 flex-wrap justify-between">
-                <Search setSearch={setSearch} />
+                <Search setSearch={setSearch} text={"ระบุชื่อชาวนา"}/>
                 <div className="flex space-x-2">
                   <AddIncome />
                   <AddExpense />
@@ -81,7 +81,7 @@ const ManageIncomeExpense = () => {
             />
             <div className="bg-white m-4 rounded-lg shadow space-y-4 p-4 basis-5/6">
               <div className="flex items-center justify-between">
-                <Search setSearch={setSearch} />
+                <Search setSearch={setSearch} text={"ระบุชื่อชาวนา"}/>
                 <div className="flex space-x-2">
                   <AddIncome />
                   <AddExpense />

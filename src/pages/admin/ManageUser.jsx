@@ -37,7 +37,7 @@ const Manageuser = () => {
             />
             <div className="bg-white m-4 rounded-lg shadow space-y-4 p-4 basis-5/6">
               <div className="flex flex-wrap justify-between items-center gap-4">
-                <Search setSearch={setSearch} />
+                <Search setSearch={setSearch} text={"ระบุชื่อชาวนา"}/>
                 <AddUser />
               </div>
               <Table_Users search={search} />
@@ -68,7 +68,7 @@ const Manageuser = () => {
             />
             <div className="bg-white m-4 rounded-lg shadow space-y-4 p-4 basis-5/6">
               <div className="flex flex-wrap justify-between items-center gap-4">
-                <Search setSearch={setSearch} />
+                <Search setSearch={setSearch} text={"ระบุชื่อชาวนา"}/>
                 <AddUser />
               </div>
               <Table_Users search={search} />
