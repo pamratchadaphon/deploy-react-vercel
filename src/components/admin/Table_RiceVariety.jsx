@@ -119,7 +119,7 @@ const Table_RiceVariety = ({ search }) => {
                 className="p-2 font-normal flex justify-center"
               >
                 <img
-                  src={`https://server-ut-ratchadaphon.vercel.app/${d.image}`}
+                  src={d.image}
                   className="h-16 w-24"
                 />
               </th>

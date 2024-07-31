@@ -8,10 +8,8 @@ import { motion } from "framer-motion";
 
 const EditRiceVariety = ({ id }) => {
   const [modal, setModal] = useState(false);
-
   const [imageURL, setImageURL] = useState("");
   const [resImg, setResImg] = useState("");
-
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -21,6 +19,7 @@ const EditRiceVariety = ({ id }) => {
   const [stability, setStability] = useState("");
   const [precautions, setPrecautions] = useState("");
   const [type, setType] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleModal = () => {
     setModal(!modal);
@@ -29,9 +28,10 @@ const EditRiceVariety = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`https://server-ut-ratchadaphon.vercel.app/riceVariety/${id}`);
+        const res = await axios.get(
+          `https://server-ut-ratchadaphon.vercel.app/riceVariety/${id}`
+        );
         setResImg(res.data.image);
-
         setName(res.data.name);
         setAge(res.data.age);
         setHeight(res.data.height);
@@ -53,54 +53,76 @@ const EditRiceVariety = ({ id }) => {
     setImageURL(URL.createObjectURL(e.target.files[0]));
   };
 
+  const uploadImage = async () => {
+    if (!image) return "";
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", import.meta.env.VITE_UPLOAD_PRESET);
+    formData.append("cloud_name", "dwskhfx91");
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dwskhfx91/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      if (!response.ok) throw new Error("Failed to upload image");
+      const imgData = await response.json();
+      return imgData.url.toString();
+    } catch (error) {
+      console.log(error);
+      return "";
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("name", name);
-    formData.append("age", age);
-    formData.append("yield", yield_rice);
-    formData.append("height", height);
-    formData.append("photosensitivity", photosensitivity);
-    formData.append("stability", stability);
-    formData.append("precautions", precautions);
-    formData.append("type", type);
+    setIsLoading(true);
+    try {
+      let updatedImageURL = imageURL;
+      if (image && image !== resImg) {
+        updatedImageURL = await uploadImage();
+      } else {
+        updatedImageURL = resImg;
+      }
 
-    const values = {
-      name: name,
-      age: age,
-      yield: yield_rice,
-      height: height,
-      photosensitivity: photosensitivity,
-      stability: stability,
-      precautions: precautions,
-      type: type,
-    };
+      const formData = {
+        name,
+        age,
+        yield: yield_rice,
+        height,
+        photosensitivity,
+        stability,
+        precautions,
+        type,
+        image: updatedImageURL,
+      };
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-
-    if (image === resImg) {
       await axios
-        .put(`https://server-ut-ratchadaphon.vercel.app/riceVariety/edit2/${id}`, values)
-        .then((response) => console.log(response.data));
-    } else {
-      await axios
-        .put(`https://server-ut-ratchadaphon.vercel.app/riceVariety/edit1/${id}`, formData, config)
-        .then((response) => {
-          console.log(response.data);
-        });
+        .put(
+          `https://server-ut-ratchadaphon.vercel.app/riceVariety/edit/${id}`,
+          formData
+        )
+        .then((result) => console.log(result.data));
+
+      Swal.fire({
+        title: "แก้ไขสำเร็จ",
+        icon: "success",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    Swal.fire({
-      title: "แก้ไขสำเสร็จ",
-      icon: "success",
-    }).then((result) => {
-      result.isConfirmed ? window.location.reload() : null;
-    });
   };
 
   return (
@@ -233,7 +255,6 @@ const EditRiceVariety = ({ id }) => {
                       className="bg-gray-50 border border-gray-300 rounded-lg p-2.5 mr-2 w-1/3 md:w-2/4"
                     />
                   </div>
-                  
                   <div className="flex items-center text-gray-900 text-sm">
                     <label
                       htmlFor="height"
@@ -289,7 +310,7 @@ const EditRiceVariety = ({ id }) => {
                   <div className="flex items-center">
                     <label
                       htmlFor="image"
-                      className="text-sm font-medium text-gray-900 w-1/4 mr-2 text-start"
+                      className="text-sm font-medium text-gray-900 mb-2 mr-2 w-1/4 text-start"
                     >
                       รูปภาพใหม่
                     </label>
@@ -298,7 +319,7 @@ const EditRiceVariety = ({ id }) => {
                       name="image"
                       id="image"
                       onChange={clickChangeImg}
-                      className="rounded-lg p-2.5"
+                      className="text-gray-900 text-sm rounded-lg py-2.5 w-3/4"
                     />
                   </div>
                 </div>
@@ -307,15 +328,12 @@ const EditRiceVariety = ({ id }) => {
                   {imageURL ? (
                     <div>
                       แสดงรูปภาพใหม่
-                      <img src={`${imageURL}`} className="w-72 h-48 pt-2" />
+                      <img src={imageURL} className="w-72 h-48 pt-2" />
                     </div>
                   ) : (
                     <div>
                       แสดงรูปภาพเดิม
-                      <img
-                        src={`https://server-ut-ratchadaphon.vercel.app/${image}`}
-                        className="w-72 h-48 pt-2"
-                      />
+                      <img src={resImg} className="w-72 h-48 pt-2" />
                     </div>
                   )}
                 </div>
@@ -324,8 +342,9 @@ const EditRiceVariety = ({ id }) => {
                   <button
                     type="submit"
                     className="text-sm bg-green-600 py-3 px-4 rounded-md text-white hover:bg-green-100 hover:text-green-700 hover:duration-200"
+                    disabled={isLoading}
                   >
-                    บันทึก
+                    {isLoading ? "กำลังบันทึก..." : "บันทึก"}
                   </button>
                   <button
                     type="button"
@@ -345,7 +364,7 @@ const EditRiceVariety = ({ id }) => {
 };
 
 EditRiceVariety.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
 };
 
 export default EditRiceVariety;

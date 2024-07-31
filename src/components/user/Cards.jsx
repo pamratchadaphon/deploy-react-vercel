@@ -24,7 +24,7 @@ const Cards = ({ data }) => {
         >
           <img
             className="rounded-t-lg w-full h-32 md:h-48"
-            src={`https://server-ut-ratchadaphon.vercel.app/${d.image}`}
+            src={d.image}
           />
 
           <div className="p-2 sm:p-5">
@@ -58,7 +58,7 @@ const Cards = ({ data }) => {
             >
               <div>
                 <img
-                  src={`https://server-ut-ratchadaphon.vercel.app/${dataById.image}`}
+                  src={dataById.image}
                   className="rounded-lg h-48 w-full"
                 />
                 <div className="mb-2">

@@ -126,7 +126,7 @@ const ViewRiceVariety = ({ id }) => {
 
                 <div className="flex justify-center">
                   <img
-                    src={`https://server-ut-ratchadaphon.vercel.app/${data.image}`}
+                    src={data.image}
                     className="w-72 h-48 border"
                   />
                 </div>
