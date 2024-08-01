@@ -28,7 +28,7 @@ const Yield_rice = ({ riceCaltivation }) => {
             ? "กำลังโหลด..."
             : riceCaltivation.total_yield > 0
             ? riceCaltivation.total_yield.toLocaleString()
-            : riceCaltivation.total_yield}
+            : riceCaltivation.total_yield}{" "}
           กิโลกรัม
         </span>
       </div>
@@ -37,7 +37,7 @@ const Yield_rice = ({ riceCaltivation }) => {
           <img src={weight} />
         </div>
         <span>
-          ปริมาณข้าวที่ขาย :{" "}
+          ปริมาณข้าวที่ขาย : {" "}
           {riceCaltivation.yield === undefined
             ? "กำลังโหลด..."
             : riceCaltivation.yield > 0

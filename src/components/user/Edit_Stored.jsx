@@ -36,10 +36,15 @@ const Edit_Stored = ({ riceCaltivation_id }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `https://server-ut-ratchadaphon.vercel.app/riceCaltivation/${riceCaltivation_id}`,
-        values
-      );
+      values.rice_consumption === "" ? (values.rice_consumption = 0) : null;
+      values.seed_rice === "" ? (values.seed_rice = 0) : null;
+
+      await axios
+        .put(
+          `https://server-ut-ratchadaphon.vercel.app/riceCaltivation/${riceCaltivation_id}`,
+          values
+        )
+        .then((result) => console.log(result.data));
       Swal.fire({
         title: "แก้ไขสำเร็จ",
         icon: "success",
