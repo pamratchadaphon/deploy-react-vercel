@@ -10,11 +10,15 @@ import { motion } from "framer-motion";
 const Edit_Yield = ({ riceCaltivation_id }) => {
   const [modal, setModal] = useState(false);
   const [yield_rice, setYield_Rice] = useState({});
+  const [income_id, setIncome_id] = useState(0);
 
   const [values, setValues] = useState({
     total_yield: "",
     yield: "",
     rice_price_per_kg: "",
+  });
+  const [income, setIncome] = useState({
+    price: values.yield * values.rice_price_per_kg,
   });
 
   useEffect(() => {
@@ -23,6 +27,21 @@ const Edit_Yield = ({ riceCaltivation_id }) => {
         const res = await axios.get(
           `https://server-ut-ratchadaphon.vercel.app/riceCaltivation/${riceCaltivation_id}`
         );
+        const res_income = await axios.get(
+          `https://server-ut-ratchadaphon.vercel.app/riceCaltivation/incomeExpense/${riceCaltivation_id}`
+        );
+
+        if (
+          res_income.data &&
+          res_income.data[0] &&
+          res_income.data[0].incomeExpense
+        ) {
+          const income = res_income.data[0].incomeExpense.filter(
+            (data) => data.type === "รายรับ"
+          );
+          setIncome_id(income[0].income_expense_id);
+        }
+
         res.data.length !== 0 ? setYield_Rice(res.data) : null;
       } catch (error) {
         console.log("Error : " + error);
@@ -53,6 +72,9 @@ const Edit_Yield = ({ riceCaltivation_id }) => {
   useEffect(() => setTotal_yield(false), [values.total_yield]);
   useEffect(() => setYield(false), [values.yield]);
   useEffect(() => setRice_price_per_kg(false), [values.rice_price_per_kg]);
+  useEffect(() => {
+    setIncome({ ...income, price: values.yield * values.rice_price_per_kg });
+  }, [values.yield, values.rice_price_per_kg]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,6 +89,14 @@ const Edit_Yield = ({ riceCaltivation_id }) => {
           .put(
             `https://server-ut-ratchadaphon.vercel.app/riceCaltivation/${riceCaltivation_id}`,
             values
+          )
+          .then((result) => {
+            console.log(result.data);
+          });
+        await axios
+          .put(
+            `https://server-ut-ratchadaphon.vercel.app/incomeExpense/${income_id}`,
+            income
           )
           .then((result) => {
             console.log(result.data);
