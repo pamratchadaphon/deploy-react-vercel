@@ -90,7 +90,7 @@ const Table_Users = ({ search }) => {
         confirmButtonText: "ตกลง",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await axios.delete(`http://localhost:8080/user/${id}`);
+          await axios.delete(`https://server-ut-ratchadaphon.vercel.app/user/${id}`);
           await Swal.fire({
             title: "ลบสำเร็จ",
             icon: "success",
