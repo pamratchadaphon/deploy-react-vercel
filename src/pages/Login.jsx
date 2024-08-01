@@ -30,6 +30,7 @@ const Login = () => {
     e.preventDefault();
     check();
     if (values.email !== "" && values.password !== "") {
+      setIsLoading(true);
       try {
         const response = await axios.post(
           "https://server-ut-ratchadaphon.vercel.app/user/login",
@@ -38,9 +39,11 @@ const Login = () => {
         const id = response.data.user_id;
         if (response.data.role === "admin") {
           localStorage.setItem("token", response.data.token);
+          setIsLoading(false);
           navigator(`/admin/dashboard`);
         } else {
           localStorage.setItem("token", response.data.token);
+          setIsLoading(false);
           navigator(`/user/home/${id}`);
         }
       } catch (error) {
