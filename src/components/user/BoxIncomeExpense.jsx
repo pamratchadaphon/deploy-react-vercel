@@ -8,7 +8,7 @@ const BoxIncomeExpense = ({ sumExpense, sumIncome }) => {
           <span className="text-gray-700">รายจ่าย</span>
           <div className="flex items-center space-x-2">
             <span className="text-xl font-semibold ">
-              {!sumExpense ? <p>กำลังโหลด...</p> : sumExpense.toLocaleString()}
+              {sumExpense.toLocaleString()}
             </span>
             <span className="text-gray-700">บาท</span>
           </div>
@@ -20,7 +20,7 @@ const BoxIncomeExpense = ({ sumExpense, sumIncome }) => {
           <span className="text-gray-700">รายรับ</span>
           <div className="flex items-center space-x-2">
             <span className="text-xl  font-semibold ">
-              {!sumIncome ? <p>กำลังโหลด...</p> : sumIncome.toLocaleString()}
+              {sumIncome.toLocaleString()}
             </span>
             <span className="text-gray-700">บาท</span>
           </div>
@@ -32,11 +32,7 @@ const BoxIncomeExpense = ({ sumExpense, sumIncome }) => {
           <span className="text-gray-800">คงเหลือ</span>
           <div className="flex items-center space-x-2">
             <span className="text-xl  font-semibold ">
-              {!sumExpense && !sumIncome ? (
-                <p>กำลังโหลด...</p>
-              ) : (
-                (sumIncome - sumExpense).toLocaleString()
-              )}
+              {(sumIncome - sumExpense).toLocaleString()}
             </span>
             <span className="text-gray-800">บาท</span>
           </div>
